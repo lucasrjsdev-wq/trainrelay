@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(Remove-Item \"c:\\\\Users\\\\lrojas\\\\Desktop\\\\claude_projects\\\\train_relay\\\\1-landing page\\\\code\\\\src\\\\App.css\" -Force)",
+      "Bash(npm run *)",
+      "Bash(npx vite *)",
+      "WebFetch(domain:stevenwatkins-html.axiomthemes.com)",
+      "Bash(grep -n \"color\\\\|background\\\\|font-family\\\\|font-size\\\\|scheme\\\\|accent\\\\|#[0-9a-fA-F]\\\\{3,6\\\\}\" \"c:\\\\Users\\\\lrojas\\\\Desktop\\\\claude_projects\\\\train_relay\\\\1-landing page\\\\plantilla\\\\stevenwatkins\\\\css\\\\global.css\")",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\lrojas\\\\Desktop\\\\claude_projects\\\\train_relay\\\\2-admin web app\\\\Plantilla\\\\Laravel\\\\\" -Recurse -Directory | Where-Object { $_.FullName -notmatch 'node_modules|vendor' } | ForEach-Object { $_.FullName.Replace\\(\"c:\\\\Users\\\\lrojas\\\\Desktop\\\\claude_projects\\\\train_relay\\\\2-admin web app\\\\Plantilla\\\\Laravel\\\\\", \"\"\\) } | Sort-Object)",
+      "Bash(php --version)",
+      "Bash(composer --version)",
+      "Bash(npm --version)",
+      "Bash(mysql --version)",
+      "PowerShell(php --version)",
+      "PowerShell(composer --version)",
+      "PowerShell(node --version)",
+      "PowerShell(mysql --version)",
+      "Read(//c/laragon/bin/**)"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+# ── PHP / Laravel ──────────────────────────────────────────
+vendor/
+.env
+.env.backup
+storage/logs/*.log
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+bootstrap/cache/
+public/storage
+*.php.bak
+
+# ── Node / React ────────────────────────────────────────────
+node_modules/
+dist/
+.cache/
+
+# ── Sistema operativo ───────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDEs ────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.suo
+*.user

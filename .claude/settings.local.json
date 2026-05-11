@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c//**)",
+      "Read(//mnt/**)",
+      "PowerShell($env:PATH -split \";\" | Where-Object { $_ -ne \"\" })",
+      "PowerShell($paths = @\\(\"C:\\\\laragon\", \"D:\\\\laragon\", \"C:\\\\Program Files\\\\laragon\", \"C:\\\\Users\\\\lrojas\\\\laragon\"\\); foreach \\($p in $paths\\) { if \\(Test-Path $p\\) { Write-Host \"ENCONTRADO: $p\"; Get-ChildItem $p | Select-Object Name } else { Write-Host \"NO existe: $p\" } })",
+      "Read(//c/laragon/**)",
+      "PowerShell(Get-ChildItem \"C:\\\\laragon\" -Force -ErrorAction SilentlyContinue | Select-Object FullName, Attributes; Write-Host \"Tamaño total:\"; \\(Get-ChildItem \"C:\\\\laragon\" -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum\\).Sum)",
+      "PowerShell(Get-ChildItem \"C:\\\\laragon\\\\bin\" -Recurse -Depth 2 -ErrorAction SilentlyContinue | Where-Object { $_.Name -match \"mysql\" } | Select-Object FullName)",
+      "PowerShell(Get-ChildItem \"C:\\\\laragon\" -Recurse -Depth 5 -Filter \"mysql.exe\" -ErrorAction SilentlyContinue | Select-Object FullName; Write-Host \"---\"; $env:PATH -split \";\" | Where-Object { $_ -match \"mysql|laragon|maria\" })"
+    ]
+  }
+}
