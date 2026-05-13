@@ -5,7 +5,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useAuth } from "../context/AuthContext";
 import { authService } from "../services/api";
 
-const RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
 // URLs de cada app por tipo de usuario (actualizar antes de producción)
 const REDIRECT_BY_TIPO = {
