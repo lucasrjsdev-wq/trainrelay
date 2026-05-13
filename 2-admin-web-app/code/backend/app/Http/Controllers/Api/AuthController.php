@@ -13,14 +13,15 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        $captchaConfigured = ! empty(config('services.recaptcha.secret'));
+
         $request->validate([
             'username'      => 'required|string',
             'password'      => 'required|string',
-            'captcha_token' => 'required|string',
+            'captcha_token' => $captchaConfigured ? 'required|string' : 'nullable|string',
         ]);
 
-        // En producción se valida el token contra Google. En local el widget es suficiente.
-        if (config('app.env') !== 'local') {
+        if ($captchaConfigured) {
             $captcha = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
                 'secret'   => config('services.recaptcha.secret'),
                 'response' => $request->captcha_token,
