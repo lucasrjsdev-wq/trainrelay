@@ -73,7 +73,7 @@ Route::prefix('chart')->group(function () {
 });
 
 // Componentpage
-Route::prefix('componentspage')->group(function () {
+Route::prefix('componentspage')->name('componentspage.')->group(function () {
     Route::controller(ComponentpageController::class)->group(function () {
         Route::get('/alert', 'alert')->name('alert');
         Route::get('/avatar', 'avatar')->name('avatar');
@@ -100,7 +100,7 @@ Route::prefix('componentspage')->group(function () {
 });
 
 // Dashboard
-Route::prefix('dashboard')->group(function () {
+Route::prefix('dashboard')->name('dashboard.')->group(function () {
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/index', 'index')->name('index');
         Route::get('/index2', 'index2')->name('index2');
@@ -184,8 +184,8 @@ Route::prefix('roleandaccess')->group(function () {
     });
 });
 
-// Users
-Route::prefix('cryptocurrency')->group(function () {
+// Cryptocurrency
+Route::prefix('cryptocurrency')->name('cryptocurrency.')->group(function () {
     Route::controller(CryptocurrencyController::class)->group(function () {
         Route::get('/marketplace', 'marketplace')->name('marketplace');
         Route::get('/marketplacedetails', 'marketplaceDetails')->name('marketplaceDetails');
