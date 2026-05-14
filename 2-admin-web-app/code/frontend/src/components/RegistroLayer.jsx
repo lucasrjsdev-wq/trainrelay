@@ -3,6 +3,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "react-router-dom";
 import { authService } from "../services/api";
 
+const COACH_APP_URL = import.meta.env.VITE_COACH_APP_URL ?? "http://localhost:5174";
+
 const RegistroLayer = () => {
   const [form, setForm] = useState({
     nombre: "",
@@ -12,7 +14,6 @@ const RegistroLayer = () => {
     tipo: "",
   });
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
   const [errorGeneral, setErrorGeneral] = useState("");
 
@@ -28,12 +29,18 @@ const RegistroLayer = () => {
     setLoading(true);
 
     try {
-      await authService.registrarse(form);
-      setSuccess(true);
+      const res = await authService.registrarse(form);
+      const { token, usuario } = res.data;
+
+      if (usuario.tipo === "entrenador") {
+        window.location.href = `${COACH_APP_URL}/auth?token=${token}`;
+      } else {
+        // atleta u otros: por ahora coming soon
+        window.location.href = "/coming-soon";
+      }
     } catch (err) {
       if (err.response?.status === 422) {
-        const validationErrors = err.response.data.errors ?? {};
-        setErrors(validationErrors);
+        setErrors(err.response.data.errors ?? {});
       } else {
         setErrorGeneral("Ocurrió un error. Intentá de nuevo más tarde.");
       }
@@ -76,13 +83,7 @@ const RegistroLayer = () => {
             </div>
           )}
 
-          {success ? (
-            <div className="alert alert-success radius-12 mb-20" role="alert">
-              <Icon icon="mdi:check-circle" className="me-8" />
-              Su usuario fue creado exitosamente. En breve se comunicarán con usted via correo electrónico para definir las funcionalidades.
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-sm-6 mb-16">
                   <div className="icon-field">
@@ -178,7 +179,6 @@ const RegistroLayer = () => {
                 {loading ? "Registrando..." : "Crear cuenta"}
               </button>
             </form>
-          )}
 
           <div className="mt-24 text-center text-sm">
             ¿Ya tenés cuenta?{" "}
