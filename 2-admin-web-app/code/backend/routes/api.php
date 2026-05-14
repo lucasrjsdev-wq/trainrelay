@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\RegistroController;
+use App\Http\Controllers\Api\CoachController;
 
 Route::post('/login',            [AuthController::class, 'login']);
 Route::post('/registrarse',      [RegistroController::class, 'registrar']);
@@ -15,7 +16,14 @@ Route::post('/reset-password',   [PasswordResetController::class, 'resetPassword
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', fn(Request $request) => $request->user());
+    Route::get('/me', fn(Request $request) => $request->user()->load('perfil', 'suscripcion'));
+
+    // Coach app
+    Route::prefix('coach')->middleware('coach')->group(function () {
+        Route::put('/perfil', [CoachController::class, 'actualizarPerfil']);
+        Route::put('/password', [CoachController::class, 'cambiarPassword']);
+        Route::post('/suscripcion/iniciar', [CoachController::class, 'iniciarSuscripcion']);
+    });
 
     Route::get('/usuarios', [UsuarioController::class, 'index']);
     Route::get('/usuarios/{id}', [UsuarioController::class, 'show']);

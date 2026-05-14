@@ -6,11 +6,7 @@ import { authService } from "../services/api";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
-const REDIRECT_BY_TIPO = {
-  dueno:       "/",
-  entrenador:  "/coming-soon",
-  atleta:      "/coming-soon",
-};
+const COACH_APP_URL = import.meta.env.VITE_COACH_APP_URL ?? "http://localhost:5174";
 
 const SignInLayer = () => {
   const [username, setUsername] = useState("");
@@ -40,10 +36,15 @@ const SignInLayer = () => {
         });
       });
       const res = await authService.login(username, password, captchaToken);
-      login(res.data.token, res.data.usuario);
+      const { token, usuario } = res.data;
 
-      const destino = REDIRECT_BY_TIPO[res.data.usuario.tipo] ?? "/";
-      navigate(destino, { replace: true });
+      if (usuario.tipo === "entrenador") {
+        window.location.href = `${COACH_APP_URL}/auth?token=${token}`;
+        return;
+      }
+
+      login(token, usuario);
+      navigate(usuario.tipo === "dueno" ? "/" : "/coming-soon", { replace: true });
     } catch (err) {
       const msg = err.response?.data?.message || "Credenciales incorrectas.";
       setError(msg);
