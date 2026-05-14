@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link, useNavigate } from "react-router-dom";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useAuth } from "../context/AuthContext";
 import { authService } from "../services/api";
+
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
 const REDIRECT_BY_TIPO = {
   dueno:       "/",
@@ -18,7 +19,6 @@ const SignInLayer = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { executeRecaptcha } = useGoogleReCaptcha();
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -32,7 +32,9 @@ const SignInLayer = () => {
     setLoading(true);
 
     try {
-      const captchaToken = await executeRecaptcha("login");
+      const captchaToken = RECAPTCHA_SITE_KEY
+        ? await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "login" })
+        : null;
       const res = await authService.login(username, password, captchaToken);
       login(res.data.token, res.data.usuario);
 
