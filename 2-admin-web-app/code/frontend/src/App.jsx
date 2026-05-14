@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -103,6 +104,15 @@ import RegistroPage from "./pages/RegistroPage";
 import UsuarioDetallePage from "./pages/UsuarioDetallePage";
 
 function App() {
+  useEffect(() => {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+    if (!siteKey || document.getElementById("recaptcha-script")) return;
+    const script = document.createElement("script");
+    script.id = "recaptcha-script";
+    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+    document.head.appendChild(script);
+  }, []);
+
   return (
     <AuthProvider>
     <BrowserRouter>

@@ -32,9 +32,13 @@ const SignInLayer = () => {
     setLoading(true);
 
     try {
-      const captchaToken = RECAPTCHA_SITE_KEY
-        ? await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "login" })
-        : null;
+      const captchaToken = await new Promise((resolve) => {
+        if (!RECAPTCHA_SITE_KEY) return resolve(null);
+        window.grecaptcha.ready(async () => {
+          const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "login" });
+          resolve(token);
+        });
+      });
       const res = await authService.login(username, password, captchaToken);
       login(res.data.token, res.data.usuario);
 
