@@ -28,7 +28,7 @@ class AuthController extends Controller
                 'remoteip' => $request->ip(),
             ]);
 
-            if (! $captcha->json('success')) {
+            if (! $captcha->json('success') || $captcha->json('score') < 0.5) {
                 return response()->json(['message' => 'Verificación CAPTCHA fallida. Intentá de nuevo.'], 422);
             }
         }

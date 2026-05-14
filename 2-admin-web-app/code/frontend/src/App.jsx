@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HomePageOne from "./pages/HomePageOne";
@@ -104,6 +105,7 @@ import UsuarioDetallePage from "./pages/UsuarioDetallePage";
 
 function App() {
   return (
+    <GoogleReCaptchaProvider reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}>
     <AuthProvider>
     <BrowserRouter>
       <RouteScrollToTop />
@@ -236,6 +238,7 @@ function App() {
       </Routes>
     </BrowserRouter>
     </AuthProvider>
+    </GoogleReCaptchaProvider>
   );
 }
 

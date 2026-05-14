@@ -1,13 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link, useNavigate } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useAuth } from "../context/AuthContext";
 import { authService } from "../services/api";
 
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-
-// URLs de cada app por tipo de usuario (actualizar antes de producción)
 const REDIRECT_BY_TIPO = {
   dueno:       "/",
   entrenador:  "/coming-soon",
@@ -20,8 +17,8 @@ const SignInLayer = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const captchaRef = useRef(null);
 
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -32,15 +29,10 @@ const SignInLayer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
-    const captchaToken = captchaRef.current?.getValue();
-    if (!captchaToken) {
-      setError("Por favor completá la verificación CAPTCHA.");
-      return;
-    }
-
     setLoading(true);
+
     try {
+      const captchaToken = await executeRecaptcha("login");
       const res = await authService.login(username, password, captchaToken);
       login(res.data.token, res.data.usuario);
 
@@ -49,7 +41,6 @@ const SignInLayer = () => {
     } catch (err) {
       const msg = err.response?.data?.message || "Credenciales incorrectas.";
       setError(msg);
-      captchaRef.current?.reset();
     } finally {
       setLoading(false);
     }
@@ -131,13 +122,6 @@ const SignInLayer = () => {
               >
                 ¿Olvidaste tu contraseña?
               </Link>
-            </div>
-
-            <div className="mb-20 d-flex justify-content-center">
-              <ReCAPTCHA
-                ref={captchaRef}
-                sitekey={RECAPTCHA_SITE_KEY}
-              />
             </div>
 
             <button
